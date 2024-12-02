@@ -6,7 +6,6 @@ from transformers import BertTokenizer, BertForMaskedLM, BertModel
 from transformers import (WEIGHTS_NAME, AdamW, get_linear_schedule_with_warmup,
                           RobertaConfig, RobertaModel, RobertaForMaskedLM, RobertaTokenizer)
 from datasets import load_dataset
-# 超参数
 from selfDataset import convert_examples_to_features, getcodeAttenMask
 from model import BertForMaskedLM1, DataCollatorForPrompt, Model
 from selfTokenizers import tokenize_function
@@ -40,20 +39,13 @@ def main():
     set_seed(CONFIG['seed'])
     # 模型初始化
     # 定义device
-    # torch.nn.BCELoss
-    # if CONFIG['wandb']:
-    #     import wandb
-    #     wandb.init(project="tagRec", entity="graphCodeBert")
-    # device = torch.device("cpu")
     device = torch.device(CONFIG['cuda'] if torch.cuda.is_available() else "cpu")
     if CONFIG['do_train']:
         graphCodeBertModel = RobertaModel.from_pretrained(CONFIG['code_model_name_or_path'])
 
         graphCodeBertModel.to(device)
-        # 加载PLM和tokenizer
         model_name = "bert-base-uncased"
         BertModel = BertForMaskedLM1.from_pretrained(model_name)
-        # 分词要用加入词表之后的模型
         # bertTokenizer = BertTokenizer.from_pretrained(CONFIG['text_model_name_or_path'], padding=True, truncation=True)
         # codeTokenizer = RobertaTokenizer.from_pretrained("Pretrained_LMs/graphcodebert-base-addtoken")
 
